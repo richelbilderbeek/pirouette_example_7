@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "Rscript scripts/example_1.R ; Rscript scripts/example_2.R ; Rscript scripts/example_3.R ; " | parallel
+echo "Done"
