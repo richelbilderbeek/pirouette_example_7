@@ -51,6 +51,11 @@ alignment_params <- create_alignment_params(
 experiment <- create_gen_experiment()
 experiments <- list(experiment)
 
+# Set the RNG seed
+for (i in seq_along(experiments)) {
+  experiments[[i]]$beast2_options$rng_seed <- rng_seed
+}
+
 # Testing
 if (1 == 2) {
   for (i in seq_along(experiments)) {
