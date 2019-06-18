@@ -117,26 +117,13 @@ utils::write.csv(
 pir_plot(errors) +
   ggsave(file.path(example_folder, "errors.png"))
 
-testit::assert(pir_params$experiments[[1]]$inference_model$mcmc$store_every != -1)
-esses <- tracerer::calc_esses(
-  traces = tracerer::parse_beast_log(pir_params$experiments[[1]]$beast2_options$output_log_filename),
-  sample_interval = pir_params$experiments[[1]]$inference_model$mcmc$store_every
-)
-
-df_esses <- data.frame(parameter = colnames(esses), ESS = as.character(esses))
-
-sink(file.path(example_folder, "esses.latex"))
-xtable::print.xtable(
-  xtable::xtable(df_esses, caption = "ESSes of example 1", label = "tab:esses_example_1", digits = 0),
-  include.rownames = FALSE
-)
-sink()
-
-print("#######################################################################")
-print("Appendix")
-print("#######################################################################")
 pir_to_pics(
   phylogeny = phylogeny,
+  pir_params = pir_params,
+  folder = example_folder
+)
+
+pir_to_tables(
   pir_params = pir_params,
   folder = example_folder
 )
