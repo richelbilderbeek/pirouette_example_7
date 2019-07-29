@@ -72,48 +72,20 @@ pir_params <- create_pir_params(
   )
 )
 
-################################################################################
-# Settings to run on Peregrine cluster
-################################################################################
-pir_params$alignment_params$fasta_filename <- file.path(example_folder, "true.fasta")
-for (i in seq_along(pir_params$experiments)) {
-  pir_params$experiments[[i]]$beast2_options$input_filename <- file.path(example_folder, "beast2_input.xml")
-  pir_params$experiments[[i]]$beast2_options$output_log_filename <- file.path(example_folder, "beast2_output.log")
-  pir_params$experiments[[i]]$beast2_options$output_trees_filenames <- file.path(example_folder, "beast2_output.trees")
-  pir_params$experiments[[i]]$beast2_options$output_state_filename <- file.path(example_folder, "beast2_output.xml.state")
-  pir_params$experiments[[i]]$beast2_options$beast2_working_dir <- example_folder
-  pir_params$experiments[[i]]$errors_filename <- file.path(example_folder, "error.csv")
-  pir_params$experiments[[i]]$beast2_options$overwrite <- TRUE
-}
-pir_params$evidence_filename <- file.path(example_folder, "evidence_true.csv")
-if (!is_one_na(pir_params$twinning_params)) {
-  pir_params$twinning_params$twin_tree_filename <- file.path(example_folder, "twin.tree")
-  pir_params$twinning_params$twin_alignment_filename <- file.path(example_folder, "twin.fasta")
-  pir_params$twinning_params$twin_evidence_filename <- file.path(example_folder, "evidence_twin.csv")
-}
+# Make Peregrine friendly
+pir_params <- peregrine::to_pff_pir_params(pir_params)
 rm_pir_param_files(pir_params)
-################################################################################
 
 errors <- pir_run(
   phylogeny,
   pir_params = pir_params
 )
 
-if (1 == 2) {
-  errors <- utils::read.csv(
-    file = file.path(example_folder, "errors.csv")
-  )
-  check_pir_out(errors)
-
-  pir_plot(errors)
-}
-
 utils::write.csv(
   x = errors,
   file = file.path(example_folder, "errors.csv"),
   row.names = FALSE
 )
-
 
 pir_plot(errors) +
   ggsave(file.path(example_folder, "errors.png"))
