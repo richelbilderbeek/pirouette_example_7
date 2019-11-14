@@ -43,7 +43,6 @@ phylogeny <- create_yule_tree(n_taxa = 6, crown_age = 10)
 
 alignment_params <- create_alignment_params(
   root_sequence = create_blocked_dna(length = 1000),
-  mutation_rate = 0.1,
   rng_seed = rng_seed
 )
 
