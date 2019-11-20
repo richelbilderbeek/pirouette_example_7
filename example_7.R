@@ -5,15 +5,13 @@
 #
 #
 
-# Set the RNG seed
-rng_seed <- 314
-
 library(pirouette)
 suppressMessages(library(ggplot2))
 library(beautier)
 
 root_folder <- getwd()
 example_no <- 7
+rng_seed <- 314
 example_folder <- file.path(root_folder, paste0("example_", example_no, "_", rng_seed))
 dir.create(example_folder, showWarnings = FALSE, recursive = TRUE)
 setwd(example_folder)
@@ -63,7 +61,7 @@ twinning_params <- create_twinning_params(
     max_n_tries = 1000
   ),
   twin_tree_filename = "twin_tree.newick",
-  twin_alignment_filename = "twin_alignment.fasta",
+  twin_alignment_filename = "twin_alignment.fas",
   twin_evidence_filename = "twin_evidence.csv"
 )
 

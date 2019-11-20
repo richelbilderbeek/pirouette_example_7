@@ -50,7 +50,6 @@ before_install:
 
 before_script:
   - Rscript -e "beastier::install_beast2()"
-  - Rscript -e "mauricer::install_beast2_pkg(\"NS\")"
 
 script:
   # Delete all previous results
