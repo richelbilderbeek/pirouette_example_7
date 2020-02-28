@@ -10,38 +10,15 @@ is_testing <- is_on_travis()
 root_folder <- getwd()
 example_no <- 7
 rng_seed <- 314
-example_folder <- file.path(root_folder, paste0("example_", example_no, "_", rng_seed))
-dir.create(example_folder, showWarnings = FALSE, recursive = TRUE)
-setwd(example_folder)
+folder_name <- file.path(root_folder, paste0("example_", example_no, "_", rng_seed))
+
+
 set.seed(rng_seed)
-testit::assert(is_beast2_installed())
 phylogeny <- create_yule_tree(n_taxa = 6, crown_age = 10)
 
-alignment_params <- create_alignment_params(
-  sim_tral_fun = get_sim_tral_with_std_nsm_fun(
-    mutation_rate = 0.1
-  ),
-  root_sequence = create_blocked_dna(length = 1000)
-)
-
-# JC69, strict, Yule
-generative_experiment <- create_gen_experiment()
-check_experiment(generative_experiment)
-experiments <- list(generative_experiment)
-
-twinning_params <- create_twinning_params(
-  sim_twin_tree_fun = get_sim_bd_twin_tree_fun(),
-  sim_twal_fun = get_sim_twal_same_n_muts_fun(
-    mutation_rate = 0.1,
-    max_n_tries = 1000
-  )
-)
-
-pir_params <- create_pir_params(
-  alignment_params = alignment_params,
-  experiments = experiments,
-  twinning_params = twinning_params
-)
+pir_params <- create_std_pir_params(folder_name = folder_name)
+# Remove candidates
+pir_params$experiments <- pir_params$experiments[1]
 
 # Shorter on Travis
 if (is_testing) {
@@ -55,20 +32,20 @@ errors <- pir_run(
 
 utils::write.csv(
   x = errors,
-  file = file.path(example_folder, "errors.csv"),
+  file = file.path(folder_name, "errors.csv"),
   row.names = FALSE
 )
 
 pir_plot(errors) +
-  ggsave(file.path(example_folder, "errors.png"))
+  ggsave(file.path(folder_name, "errors.png"))
 
 pir_to_pics(
   phylogeny = phylogeny,
   pir_params = pir_params,
-  folder = example_folder
+  folder = folder_name
 )
 
 pir_to_tables(
   pir_params = pir_params,
-  folder = example_folder
+  folder = folder_name
 )
