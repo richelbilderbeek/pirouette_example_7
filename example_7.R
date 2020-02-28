@@ -22,8 +22,6 @@ phylogeny <- create_yule_tree(n_taxa = 6, crown_age = 10)
 pir_params <- create_std_pir_params(folder_name = folder_name)
 # Remove candidates
 pir_params$experiments <- pir_params$experiments[1]
-
-# Shorter on Travis
 if (is_testing) {
   pir_params <- shorten_pir_params(pir_params)
 }
